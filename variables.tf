@@ -33,3 +33,8 @@ variable "name" {
 variable "tags" {
   type = "map"
 }
+
+variable "instance_size" {
+  default = "t2.small"
+  type = "string"
+}
