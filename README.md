@@ -23,11 +23,13 @@ Before using this module, you'll need to generate a key pair for your server and
 |`ami_id`|`string`|No. Defaults to Ubuntu 16.04 AMI in us-east-1|The AMI ID to use.|
 |`env`|`string`|No. Defaults "prod"|The name of environment for WireGuard. Used to differentiate multiple deployments.|
 |`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
+|`name`|`string`|Yes.|Prefix to add to all the resources created by the module.|
 
 ## Usage
 ```terraform
 module "wireguard" {
-  source            = "git@github.com:jmhale/terraform-wireguard.git"
+  source            = source = "git::ssh://git-codecommit.eu-west-1.amazonaws.com/v1/repos/terraform-aws-wireguard"
+  name              = "prefix"
   ssh_key_id        = "ssh-key-id-0987654"
   vpc_id            = "vpc-01234567"
   public_subnet_ids = ["subnet-01234567"]
