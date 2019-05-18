@@ -1,12 +1,16 @@
 #cloud-config
+
 package_update: true
 package_upgrade: true
+
 apt_sources:
   - source: "ppa:wireguard/wireguard"
+
 packages:
   - wireguard-dkms
   - wireguard-tools
   - awscli
+
 write_files:
   - path: /etc/wireguard/wg0.conf
     content: |
@@ -18,6 +22,7 @@ write_files:
       PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
       ${peers}
+
 runcmd:
   - export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
   - export REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep -oP '\"region\"[[:space:]]*:[[:space:]]*\"\K[^\"]+')

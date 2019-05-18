@@ -70,7 +70,7 @@ resource "aws_autoscaling_group" "wireguard_asg" {
     },
     {
       key                 = "tf-managed"
-      value               = "True"
+      value               = "true"
       propagate_at_launch = true
     },
   ]

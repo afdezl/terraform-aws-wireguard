@@ -25,7 +25,7 @@ Before using this module, you'll need to generate a key pair for your server and
 |`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
 
 ## Usage
-```
+```terraform
 module "wireguard" {
   source            = "git@github.com:jmhale/terraform-wireguard.git"
   ssh_key_id        = "ssh-key-id-0987654"
