@@ -1,23 +1,22 @@
 data "aws_ami" "wireguard_ami_ubuntu_18" {
-  most_recent      = true
-  owners           = ["099720109477"]
+  most_recent = true
+  owners      = ["099720109477"]
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
   }
 
   filter {
-    name = "root-device-type"
+    name   = "root-device-type"
     values = ["ebs"]
   }
 
   filter {
-    name = "virtualization-type"
+    name   = "virtualization-type"
     values = ["hvm"]
   }
 }
-
 
 data "template_file" "user_data" {
   template = "${file("${path.module}/templates/user-data.tpl")}"
@@ -59,6 +58,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
   user_data                   = "${data.template_cloudinit_config.config.rendered}"
   security_groups             = ["${aws_security_group.sg_wireguard_external.id}"]
   associate_public_ip_address = true
+  enable_monitoring           = false
 
   lifecycle {
     create_before_destroy = true
@@ -80,13 +80,13 @@ resource "aws_autoscaling_group" "wireguard_asg" {
 
   tags = [
     {
-      key = "Name"
-      value = "${var.name}-wireguard-asg"
+      key                 = "Name"
+      value               = "${var.name}-wireguard-asg"
       propagate_at_launch = true
     },
     {
-      key = "Terraform"
-      value = "true"
+      key                 = "Terraform"
+      value               = "true"
       propagate_at_launch = true
     },
   ]
