@@ -30,7 +30,7 @@ resource "aws_eip" "wireguard_eip" {
 }
 
 resource "aws_launch_configuration" "wireguard_launch_config" {
-  name_prefix                 = "wireguard-${var.env}-lc-"
+  name_prefix                 = "${var.name}-wireguard-lc"
   image_id                    = "${var.ami_id}"
   instance_type               = "t2.micro"
   key_name                    = "${var.ssh_key_id}"
@@ -45,7 +45,7 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
 }
 
 resource "aws_autoscaling_group" "wireguard_asg" {
-  name_prefix          = "wireguard-${var.env}-asg-"
+  name_prefix          = "${var.name}-wireguard-asg"
   max_size             = 1
   min_size             = 1
   launch_configuration = "${aws_launch_configuration.wireguard_launch_config.name}"
@@ -58,20 +58,5 @@ resource "aws_autoscaling_group" "wireguard_asg" {
   }
 
   tags = [
-    {
-      key                 = "Name"
-      value               = "wireguard-${var.env}"
-      propagate_at_launch = true
-    },
-    {
-      key                 = "Project"
-      value               = "wireguard"
-      propagate_at_launch = true
-    },
-    {
-      key                 = "tf-managed"
-      value               = "true"
-      propagate_at_launch = true
-    },
   ]
 }

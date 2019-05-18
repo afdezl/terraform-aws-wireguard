@@ -25,3 +25,11 @@ variable "env" {
   default = "prod"
   description = "The name of environment for WireGuard. Used to differentiate multiple deployments"
 }
+
+variable "name" {
+  type = "string"
+}
+
+variable "tags" {
+  type = "map"
+}

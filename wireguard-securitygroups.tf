@@ -1,14 +1,9 @@
 resource "aws_security_group" "sg_wireguard_external" {
-  name        = "wireguard-${var.env}-external"
+  name        = "${var.name}-wireguard-external"
   description = "Terraform Managed. Allow Wireguard client traffic from internet."
   vpc_id      = "${var.vpc_id}"
 
-  tags {
-    Name       = "wireguard-${var.env}-external"
-    Project    = "wireguard"
-    tf-managed = "True"
-    env        = "${var.env}"
-  }
+  tags = "${var.tags}"
 
   ingress {
     from_port   = 51820
@@ -26,16 +21,11 @@ resource "aws_security_group" "sg_wireguard_external" {
 }
 
 resource "aws_security_group" "sg_wireguard_admin" {
-  name        = "wireguard-${var.env}-admin"
+  name        = "${var.name}-wireguard-admin"
   description = "Terraform Managed. Allow admin traffic to internal resources from VPN"
   vpc_id      = "${var.vpc_id}"
 
-  tags {
-    Name       = "wireguard-${var.env}-admin"
-    Project    = "vpn"
-    tf-managed = "True"
-    env        = "${var.env}"
-  }
+  tags = "${var.tags}"
 
   ingress {
     from_port       = 0
