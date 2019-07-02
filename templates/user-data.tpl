@@ -10,6 +10,7 @@ packages:
   - wireguard-dkms
   - wireguard-tools
   - awscli
+  - qrencode
 
 write_files:
   - path: /etc/wireguard/wg0.conf
