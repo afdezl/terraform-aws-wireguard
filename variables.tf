@@ -12,12 +12,12 @@ variable "ami_id" {
 }
 
 variable "public_subnet_ids" {
-  type        = "list"
+  type        = list(string)
   description = "A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list."
 }
 
 variable "wg_client_public_keys" {
-  type        = "list"
+  type        = list(map(string))
   description = "List of maps of client IPs and public keys. See Usage in README for details."
 }
 
@@ -27,14 +27,15 @@ variable "env" {
 }
 
 variable "name" {
-  type = "string"
+  type = string
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "instance_size" {
   default = "t2.small"
-  type    = "string"
+  type    = string
 }
+
