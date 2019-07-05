@@ -33,10 +33,12 @@ module "wireguard" {
   ssh_key_id        = "ssh-key-id-0987654"
   vpc_id            = "vpc-01234567"
   public_subnet_ids = ["subnet-01234567"]
-  wg_client_public_keys = [
-    {"192.168.2.2/32" = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU="},
-    {"192.168.2.3/32" = "+IEmKgaapYosHeehKW8MCcU65Tf5e4aXIvXGdcUlI0Q="},
-    {"192.168.2.4/32" = "WO0tKrpUWlqbl/xWv6riJIXipiMfAEKi51qvHFUU30E="},
+  wg_clients = [
+    { 
+      ip = "192.168.2.2/32",
+      public_key = "QFX/DXxUv56mleCJbfYyhN/KnLCrgp7Fq2fyVOk/FWU=",
+      name = "j-edgar-laptop"
+    },
   ]
 }
 ```

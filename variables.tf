@@ -16,7 +16,7 @@ variable "public_subnet_ids" {
   description = "A list of subnets for the Autoscaling Group to use for launching instances. May be a single subnet, but it must be an element in a list."
 }
 
-variable "wg_client_public_keys" {
+variable "wg_clients" {
   type        = list(map(string))
   description = "List of maps of client IPs and public keys. See Usage in README for details."
 }
@@ -38,4 +38,3 @@ variable "instance_size" {
   default = "t2.small"
   type    = string
 }
-
