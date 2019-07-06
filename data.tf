@@ -1,5 +1,7 @@
 
-data "aws_caller_identity" self {}
+data "aws_caller_identity" "self" {}
+
+data "aws_region" "current" {}
 
 data "aws_ami" "wireguard_ami_ubuntu_18" {
   most_recent = true
@@ -30,11 +32,9 @@ data "template_file" "user_data" {
   }
 }
 
-
 data "aws_ssm_parameter" "wg_server_private_key" {
   name = "/wireguard/server-private-key"
 }
-
 
 data "template_cloudinit_config" "config" {
   part {
@@ -42,7 +42,6 @@ data "template_cloudinit_config" "config" {
     content      = data.template_file.user_data.rendered
   }
 }
-
 
 data "aws_iam_policy_document" "ec2_assume_role" {
   statement {
@@ -56,7 +55,6 @@ data "aws_iam_policy_document" "ec2_assume_role" {
     }
   }
 }
-
 
 data "aws_iam_policy_document" "wireguard_policy_doc" {
   statement {

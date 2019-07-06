@@ -4,9 +4,39 @@ locals {
   asg_max_instances = 1
 }
 
-
 resource "aws_eip" "wireguard_eip" {
   vpc = true
+}
+
+resource "aws_iam_policy" "wireguard_policy" {
+  name        = "${var.name}-wireguard-${data.aws_region.current.name}"
+  description = "Terraform Managed. Allows Wireguard instance to attach EIP."
+  policy      = data.aws_iam_policy_document.wireguard_policy_doc.json
+}
+
+
+resource "aws_iam_role" "wireguard_role" {
+  name               = "${var.name}-wireguard-${data.aws_region.current.name}"
+  description        = "Terraform Managed. Role to allow Wireguard instance to attach EIP."
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role.json
+}
+
+
+resource "aws_iam_role_policy_attachment" "wireguard_roleattach" {
+  role       = aws_iam_role.wireguard_role.name
+  policy_arn = aws_iam_policy.wireguard_policy.arn
+}
+
+
+resource "aws_iam_role_policy_attachment" "ssm_ec2_role" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+  role       = aws_iam_role.wireguard_role.name
+}
+
+resource "aws_iam_instance_profile" "wireguard_profile" {
+  name = "${var.name}-wireguard-${data.aws_region.current.name}"
+  role = aws_iam_role.wireguard_role.name
 }
 
 resource "aws_launch_configuration" "wireguard_launch_config" {
@@ -24,7 +54,6 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
     create_before_destroy = true
   }
 }
-
 
 resource "aws_autoscaling_group" "wireguard_asg" {
   name                 = "${var.name}-wireguard-asg"
@@ -58,7 +87,6 @@ resource "aws_autoscaling_group" "wireguard_asg" {
   ]
 }
 
-
 resource "aws_autoscaling_policy" "scale_out" {
   name                   = "wireguard-start"
   scaling_adjustment     = 1
@@ -66,7 +94,6 @@ resource "aws_autoscaling_policy" "scale_out" {
   cooldown               = 240
   autoscaling_group_name = aws_autoscaling_group.wireguard_asg.name
 }
-
 
 resource "aws_autoscaling_policy" "scale_in" {
   name                   = "wireguard-stop"
@@ -92,40 +119,6 @@ resource "aws_autoscaling_schedule" "nightly" {
   }
 }
 
-
-resource "aws_iam_policy" "wireguard_policy" {
-  name        = "${var.name}-wireguard"
-  description = "Terraform Managed. Allows Wireguard instance to attach EIP."
-  policy      = data.aws_iam_policy_document.wireguard_policy_doc.json
-}
-
-
-resource "aws_iam_role" "wireguard_role" {
-  name               = "${var.name}-wireguard"
-  description        = "Terraform Managed. Role to allow Wireguard instance to attach EIP."
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role.json
-}
-
-
-resource "aws_iam_role_policy_attachment" "wireguard_roleattach" {
-  role       = aws_iam_role.wireguard_role.name
-  policy_arn = aws_iam_policy.wireguard_policy.arn
-}
-
-
-resource "aws_iam_role_policy_attachment" "ssm_ec2_role" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
-  role       = aws_iam_role.wireguard_role.name
-}
-
-
-resource "aws_iam_instance_profile" "wireguard_profile" {
-  name = "${var.name}-wireguard"
-  role = aws_iam_role.wireguard_role.name
-}
-
-
 resource "aws_security_group" "sg_wireguard_external" {
   name        = "${var.name}-wireguard-external"
   description = "Terraform Managed. Allow Wireguard client traffic from internet."
@@ -147,7 +140,6 @@ resource "aws_security_group" "sg_wireguard_external" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 
 resource "aws_security_group" "sg_wireguard_admin" {
   name        = "${var.name}-wireguard-admin"
@@ -177,7 +169,6 @@ resource "aws_security_group" "sg_wireguard_admin" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 
 resource "aws_ssm_parameter" "peers" {
   name  = "/wireguard/peers"

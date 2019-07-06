@@ -23,6 +23,7 @@ write_files:
       import boto3
       import json
       import sys
+      import urllib3
 
       from typing import List, Dict
 
@@ -44,9 +45,15 @@ write_files:
       AllowedIPs = {ip}
       """
 
+      def instance_region():
+          http = urllib3.PoolManager()
+          r = http.request("GET", "http://169.254.169.254/latest/dynamic/instance-identity/document")
+          metadata = json.loads(r.data)
+          return metadata['region']
+
 
       def get_peers() -> List[Dict]:
-          ssm = boto3.client("ssm", region_name=sys.argv[1])
+          ssm = boto3.client("ssm", region_name=instance_region())
           parameters = ssm.get_parameters_by_path(
               Path='/wireguard',
               Recursive=True,
@@ -88,6 +95,6 @@ runcmd:
   - ufw allow ssh
   - ufw allow 51820/udp
   - ufw --force enable
-  - python3 /opt/wireguard/wg_config_creator.py $${REGION} > /etc/wireguard/wg0.conf
+  - python3 /opt/wireguard/wg_config_creator.py > /etc/wireguard/wg0.conf
   - systemctl enable wg-quick@wg0.service
   - systemctl start wg-quick@wg0.service
