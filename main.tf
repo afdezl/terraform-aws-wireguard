@@ -114,6 +114,12 @@ resource "aws_iam_role_policy_attachment" "wireguard_roleattach" {
 }
 
 
+resource "aws_iam_role_policy_attachment" "ssm_ec2_role" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+  role       = aws_iam_role.wireguard_role.name
+}
+
+
 resource "aws_iam_instance_profile" "wireguard_profile" {
   name = "${var.name}-wireguard"
   role = aws_iam_role.wireguard_role.name
@@ -178,5 +184,3 @@ resource "aws_ssm_parameter" "peers" {
   type  = "SecureString"
   value = jsonencode(var.wg_clients)
 }
-
-
