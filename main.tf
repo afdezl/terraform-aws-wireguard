@@ -5,6 +5,7 @@ locals {
 }
 
 resource "aws_eip" "wireguard_eip" {
+  count = (var.enable_eip ? 1: 0)
   vpc = true
 }
 

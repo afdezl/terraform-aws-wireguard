@@ -38,3 +38,7 @@ variable "instance_size" {
   default = "t2.small"
   type    = string
 }
+
+variable "enable_eip" {
+  default = false
+}

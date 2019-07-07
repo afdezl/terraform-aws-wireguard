@@ -1,5 +1,5 @@
 output "vpn_ip" {
-  value       = aws_eip.wireguard_eip.public_ip
+  value       = (var.enable_eip ? aws_eip.wireguard_eip[0].public_ip : null)
   description = "The public IPv4 address of the AWS Elastic IP assigned to the instance."
 }
 

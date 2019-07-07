@@ -85,9 +85,11 @@ write_files:
           generate_wg_config()
 
 runcmd:
+%{ if eip_id }
   - export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
   - export REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep -oP '\"region\"[[:space:]]*:[[:space:]]*\"\K[^\"]+')
   - aws --region $${REGION} ec2 associate-address --allocation-id ${eip_id} --instance-id $${INSTANCE_ID}
+%{endif}
   - chown -R root:root /etc/wireguard/
   - chmod -R og-rwx /etc/wireguard/*
   - sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf

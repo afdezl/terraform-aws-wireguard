@@ -28,7 +28,7 @@ data "template_file" "user_data" {
 
   vars = {
     wg_server_private_key = data.aws_ssm_parameter.wg_server_private_key.value
-    eip_id                = aws_eip.wireguard_eip.id
+    eip_id                = (var.enable_eip ? aws_eip.wireguard_eip[0].id : false)
   }
 }
 
