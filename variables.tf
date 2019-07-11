@@ -42,3 +42,7 @@ variable "instance_size" {
 variable "enable_eip" {
   default = false
 }
+
+variable "port" {
+  default = 51820
+}

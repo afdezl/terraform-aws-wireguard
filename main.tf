@@ -128,8 +128,8 @@ resource "aws_security_group" "sg_wireguard_external" {
   tags = var.tags
 
   ingress {
-    from_port   = 51820
-    to_port     = 51820
+    from_port   = var.port
+    to_port     = var.port
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
