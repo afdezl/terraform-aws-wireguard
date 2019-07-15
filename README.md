@@ -3,6 +3,9 @@
 A Terraform module to deploy a WireGuard VPN server on AWS.
 
 ## Prerequisites
+
+*NOTE: This module is only compatible with terraform >0.12.0*
+
 Before using this module, you'll need to generate a key pair for your server and client, and store the server's private key and client's public key in AWS SSM, which cloud-init will source and add to WireGuard's configuration.
 
 - Install the WireGuard tools for your OS: https://www.wireguard.com/install/
@@ -24,11 +27,12 @@ Before using this module, you'll need to generate a key pair for your server and
 |`env`|`string`|No. Defaults "prod"|The name of environment for WireGuard. Used to differentiate multiple deployments.|
 |`wg_client_public_keys`|`list`|Yes.|List of maps of client IPs and public keys. See Usage for details.|
 |`name`|`string`|Yes.|Prefix to add to all the resources created by the module.|
+|`enable_eip`|`bool`|No. Defaults to false.|Whether to assign en elastic IP or use the subnet provided public IP.|
 
 ## Usage
 ```terraform
 module "wireguard" {
-  source            = source = "git::ssh://git-codecommit.eu-west-1.amazonaws.com/v1/repos/terraform-aws-wireguard"
+  source            = "git::ssh://git-codecommit.eu-west-1.amazonaws.com/v1/repos/terraform-aws-wireguard"
   name              = "prefix"
   ssh_key_id        = "ssh-key-id-0987654"
   vpc_id            = "vpc-01234567"
@@ -48,12 +52,4 @@ module "wireguard" {
 |---------------|-------------|
 |`vpn_ip`|The public IPv4 address of the AWS Elastic IP assigned to the instance.|
 |`vpn_sg_id`|ID of the internal Security Group to associate with other resources needing to be accessed on VPN|
-
-## Caveats
-
-- I would strongly recommend forking this repo or cloning it locally and change the `source` definition to be something that you control. You really don't want your infra to be at the mercy of my changes.
-
-
-## To-do
-
-- Support multiple clients.
+|`vpn_asg_name`|Name of the autoscaling that the Wireguard instance belongs to|
