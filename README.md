@@ -32,7 +32,7 @@ Before using this module, you'll need to generate a key pair for your server and
 ## Usage
 ```terraform
 module "wireguard" {
-  source            = "git::ssh://git-codecommit.eu-west-1.amazonaws.com/v1/repos/terraform-aws-wireguard"
+  source            = "git@github.com:afdezl/terraform-aws-wireguard.git"
   name              = "prefix"
   ssh_key_id        = "ssh-key-id-0987654"
   vpc_id            = "vpc-01234567"
@@ -53,3 +53,10 @@ module "wireguard" {
 |`vpn_ip`|The public IPv4 address of the AWS Elastic IP assigned to the instance.|
 |`vpn_sg_id`|ID of the internal Security Group to associate with other resources needing to be accessed on VPN|
 |`vpn_asg_name`|Name of the autoscaling that the Wireguard instance belongs to|
+
+
+## Multiple client support
+New clients can be added on demand and will be updated in near real time on a running instance or on instance recycle.
+To take advantage of this take a look at the 
+
+Based on the work of [terraform-aws-wireguard (jmhale)](https://github.com/jmhale/terraform-aws-wireguard).
