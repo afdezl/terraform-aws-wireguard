@@ -9,7 +9,7 @@ data "aws_ami" "wireguard_ami_ubuntu_18" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-arm64-server-*"]
   }
 
   filter {
