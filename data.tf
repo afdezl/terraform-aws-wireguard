@@ -30,6 +30,7 @@ data "template_file" "user_data" {
     wg_server_private_key = data.aws_ssm_parameter.wg_server_private_key.value
     eip_id                = (var.enable_eip ? aws_eip.wireguard_eip[0].id : false)
     port                  = var.port
+    interface_name        = var.interface_name
   }
 }
 

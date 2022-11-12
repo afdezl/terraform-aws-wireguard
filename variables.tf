@@ -46,3 +46,8 @@ variable "enable_eip" {
 variable "port" {
   default = 51820
 }
+
+variable "interface_name" {
+  default = "eth0"
+  type = string
+}
