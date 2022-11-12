@@ -9,7 +9,7 @@ data "aws_ami" "wireguard_ami_ubuntu_18" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-arm64-server-*"]
   }
 
   filter {
@@ -30,6 +30,7 @@ data "template_file" "user_data" {
     wg_server_private_key = data.aws_ssm_parameter.wg_server_private_key.value
     eip_id                = (var.enable_eip ? aws_eip.wireguard_eip[0].id : false)
     port                  = var.port
+    interface_name        = var.interface_name
   }
 }
 
